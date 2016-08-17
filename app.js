@@ -97,18 +97,10 @@ io.on('connection', function(socket) {
       return;
     }
 
-    var args = ["-w", "320", "-h", "240", "-q", "15", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "2000"];
+    var args = ["-w", "320", "-h", "240", "-q", "15", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "500"];
     proc = spawn('raspistill', args);
 
-    console.log('Watching for changes...');
-
     app.set('watchingFile', true);
-
-    // setInterval(function(){
-    //  if (app.get('watchingFile')) {
-    //    io.sockets.emit('liveStream', 'image_stream.jpg?_t=' + (Math.random() * 100000));
-    //  }
-    //}, 500);
 
     fs.watchFile('./stream/image_stream.jpg', function (event, filename) {
       io.sockets.emit('liveStream', 'image_stream.jpg?_t=' + (Math.random() * 100000));
