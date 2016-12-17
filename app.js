@@ -97,7 +97,7 @@ io.on('connection', function(socket) {
       return;
     }
 
-    var args = ["-w", "320", "-h", "240", "-q", "15", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "500"];
+    var args = ["-w", "320", "-h", "240", "-q", "15", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "500", "-md", "5"];
     proc = spawn('raspistill', args);
 
     app.set('watchingFile', true);
