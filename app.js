@@ -4,14 +4,9 @@ var favicon       = require('serve-favicon');
 var logger        = require('morgan');
 var cookieParser  = require('cookie-parser');
 var bodyParser    = require('body-parser');
-// var http = require('http').Server(app);
-// var io = require('socket.io')(http);
 var fs            = require('fs');
 var socket_io     = require( "socket.io" );
 var io            = socket_io();
-
-var routes = require('./routes/index');
-var garagedoor = require('./routes/garagedoor');
 
 var spawn = require('child_process').spawn;
 var proc;
@@ -35,9 +30,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// app.use('/', routes);
-// app.use('/garagedoor', garagedoor);
 
 app.get('/garagemaster', function(req, res) {
   res.sendFile(__dirname + '/public/jarvis1.html');
@@ -77,10 +69,6 @@ io.on('connection', function(socket) {
   })
 
 });
-
-// http.listen(3001, function() {
-//   console.log('Web sockets listening on *:3001');
-// });
 
   function stopStreaming() {
     if (Object.keys(sockets).length == 0) {
