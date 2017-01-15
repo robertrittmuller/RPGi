@@ -24,20 +24,39 @@
   	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
   	<script src="/socket.io/socket.io.js"></script>
 	<script>
-  		var socket = io();
+	var socket = io();
+	
+	function MyFunctions(hypeDocument, element, event) {
+  		// run your functions that require a loaded Hype scene here. 
   		socket.on('liveStream', function(url) {
     		var preload_image = new Image();
     		preload_image.onload = displayImage(url);
 			preload_image.src = url;
   		});
- 
-  		function startStream() {
-    		socket.emit('start-stream');
-  		}
+  		
+  		socket.on('doorStatus', function(status) {
+  			var statusMsg = hypeDocument.getElementById('doorStatus');
+  			if(status == 'open') {
+  				hypeDocument.startTimelineNamed('DoorOpen', hypeDocument.kDirectionForward);
+  				document.getElementById("doorStatus").innerHTML = "&nbsp&nbsp&nbsp&nbsp DOOR OPEN <br>";
+  				
+  			} else {
+  				document.getElementById("doorStatusClosed").style.display = "inherit";
+  				document.getElementById("doorStatus").innerHTML = "&nbsp DOOR CLOSED <br>";
+  			}
+  		});
   		
   		function displayImage(url) {
   			$('#stream').css('background-image', 'url(' + url + ')');
   		}
+	}
+	if ("HYPE_eventListeners" in window === false) {
+  		window.HYPE_eventListeners = Array();
+	}
+	window.HYPE_eventListeners.push({
+  	"type": "HypeSceneLoad",
+  	"callback": MyFunctions
+	});
   </script>
 	
 
@@ -47,7 +66,7 @@
 	<!-- copy these lines to your document: -->
 
 	<div id="jarvis1_hype_container" style="margin:auto;position:relative;width:414px;height:736px;overflow:hidden;" aria-live="polite">
-		<script type="text/javascript" charset="utf-8" src="jarvis1.hyperesources/jarvis1_hype_generated_script.js?54808"></script>
+		<script type="text/javascript" charset="utf-8" src="jarvis1.hyperesources/jarvis1_hype_generated_script.js?8879"></script>
 	</div>
 
 	<!-- end copy -->

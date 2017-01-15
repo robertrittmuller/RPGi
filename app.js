@@ -10,6 +10,7 @@ var io            = socket_io();
 
 var spawn = require('child_process').spawn;
 var proc;
+var vision;
 
 var app = express();
 
@@ -40,10 +41,16 @@ var sockets = {};
 io.on('connection', function(socket) {
 
   sockets[socket.id] = socket;
-  console.log("Total clients connected : ", Object.keys(sockets).length);
+  socket.emit('totalConnected', Object.keys(sockets).length);
+  checkDoorStatus(io);
+
+    socket.on('connect', function() {
+        socket.emit('totalClients', totalClients);
+    });
 
   socket.on('disconnect', function () {
     delete sockets[socket.id];
+    io.emit('totalConnected', Object.keys(sockets).length);
 
     // no more sockets, kill the stream
     if (Object.keys(sockets).length == 0) {
@@ -62,11 +69,17 @@ io.on('connection', function(socket) {
     var Gpio = require('onoff').Gpio,
     door = new Gpio(4, 'out');
     door.writeSync(0);
-    console.log('Door open/close request');
     setTimeout(function() {
       door.writeSync(1);
     }, 2000);
-  })
+    setTimeout(function () {
+        checkDoorStatus(io);
+    }, 5000);
+  });
+
+  setInterval(function(){
+      // checkDoorStatus(io);
+  }, 300000);
 
 });
 
@@ -76,6 +89,45 @@ io.on('connection', function(socket) {
       if (proc) proc.kill();
       fs.unwatchFile('./stream/image_stream.jpg');
     }
+  }
+
+  function checkDoorStatus(io) {
+      // before we do anything let's make sure we did not just check
+      var now = new Date().getTime();
+      var stats = fs.statSync("vision.log");
+      var endTime = new Date(stats.mtime).getTime() + 60000;
+      // var mtime = new Date(util.inspect(stats.mtime));
+      if(endTime > now) {
+          // just pull last output
+          fs.readFile('vision.log', 'utf8', function (err,data) {
+              if (err) {
+                  // return console.log(err);
+              }
+              io.sockets.emit('doorStatus', data);
+          });
+      } else {
+        // grab an image
+        var args = ["-w", "320", "-h", "240", "-q", "15", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "500", "-md", "5"];
+        proc = spawn('raspistill', args);
+
+        if (fs.existsSync('./stream/image_stream.jpg')) {
+            var PythonShell = require('python-shell');
+            var options = {
+                mode: 'text',
+                // pythonOptions: ['-u'],
+                scriptPath: './garagevision',
+                args: ['./stream/image_stream.jpg']
+            };
+            PythonShell.run('vision.py', options, function (err, results) {
+                fs.readFile('vision.log', 'utf8', function (err, data) {
+                    if (err) {
+                        // return console.log(err);
+                    }
+                    io.sockets.emit('doorStatus', data);
+                });
+            });
+        }
+      }
   }
 
   function startStreaming(io) {
