@@ -37,6 +37,7 @@
   		socket.on('doorStatus', function(status) {
   			var statusMsg = hypeDocument.getElementById('doorStatus');
   			if(status == 'open') {
+                document.getElementById("doorStatusClosed").style.display = "none";
   				hypeDocument.startTimelineNamed('DoorOpen', hypeDocument.kDirectionForward);
   				document.getElementById("doorStatus").innerHTML = "&nbsp&nbsp&nbsp&nbsp DOOR OPEN <br>";
   				

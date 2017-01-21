@@ -1,5 +1,9 @@
 import tensorflow as tf
 import sys
+import os
+
+# play nice with CPU resources
+os.nice(20)
 
 #can the excessive logging
 tf.logging.set_verbosity(tf.logging.FATAL)
