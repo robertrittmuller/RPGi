@@ -31,6 +31,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// display the local UI
 app.get('/garagemaster', function(req, res) {
   res.sendFile(__dirname + '/public/jarvis1.html');
 });
@@ -117,23 +118,21 @@ function startStreaming(io) {
 }
 
 function stopStreaming() {
+    const fileName = './stream/image_stream.jpg';
     if (Object.keys(sockets).length == 0) {
         app.set('watchingFile', false);
         if (proc) proc.kill();
-        fs.unwatchFile('./stream/image_stream.jpg');
+        fs.unwatchFile(fileName);
+        fs.unlink(fileName);
     }
 }
 
   function checkDoorStatus() {
-        // grab an image
-        var args = ["-w", "320", "-h", "240", "-q", "15", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "500", "-md", "5"];
-        proc = spawn('raspistill', args);
 
         if (fs.existsSync('./stream/image_stream.jpg')) {
             var PythonShell = require('python-shell');
             var options = {
                 mode: 'text',
-                // pythonOptions: ['-u'],
                 scriptPath: './garagevision',
                 args: ['./stream/image_stream.jpg']
             };
@@ -144,6 +143,9 @@ function stopStreaming() {
                     }
                 });
             });
+        } else {
+            var args = ["-w", "320", "-h", "240", "-q", "15", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "500", "-md", "5"];
+            proc = spawn('raspistill', args);
         }
   }
 
