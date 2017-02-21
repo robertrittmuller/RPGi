@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // display the local UI
 app.get('/garagemaster', function(req, res) {
-  res.sendFile(__dirname + '/public/jarvis1.html');
+  res.sendFile(__dirname + '/public/RPGi.html');
 });
 
 setInterval(function(){
