@@ -32,7 +32,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // display the local UI
-app.get('/garagemaster', function(req, res) {
+app.get('/RPGi', function(req, res) {
   res.sendFile(__dirname + '/public/RPGi.html');
 });
 
