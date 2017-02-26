@@ -37,9 +37,9 @@ app.get('/RPGi', function(req, res) {
 });
 
 setInterval(function(){
-    // check the door once every 60 seconds.
+    // check the door once every 30 seconds.
     checkDoorStatus();
-}, 60000);
+}, 30000);
 
 var sockets = {};
 
@@ -104,17 +104,16 @@ function startStreaming(io) {
 
     if (app.get('watchingFile')) {
         io.sockets.emit('liveStream', 'image_stream.jpg?_t=' + (Math.random() * 100000));
-        return;
+    } else {
+        var args = ["-w", "320", "-h", "240", "-q", "15", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "500", "-md", "5"];
+        proc = spawn('raspistill', args);
+
+        app.set('watchingFile', true);
+
+        fs.watchFile('./stream/image_stream.jpg', function (event, filename) {
+            io.sockets.emit('liveStream', 'image_stream.jpg?_t=' + (Math.random() * 100000));
+        })
     }
-
-    var args = ["-w", "320", "-h", "240", "-q", "15", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "500", "-md", "5"];
-    proc = spawn('raspistill', args);
-
-    app.set('watchingFile', true);
-
-    fs.watchFile('./stream/image_stream.jpg', function (event, filename) {
-        io.sockets.emit('liveStream', 'image_stream.jpg?_t=' + (Math.random() * 100000));
-    })
 }
 
 function stopStreaming() {
