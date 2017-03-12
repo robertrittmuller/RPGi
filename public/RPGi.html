@@ -37,6 +37,7 @@
   		socket.on('doorStatus', function(status) {
   			var statusMsg = hypeDocument.getElementById('doorStatus');
   			if(status == 'open') {
+  				document.getElementById("doorStatusClosed").style.display = "none";
   				hypeDocument.startTimelineNamed('DoorOpen', hypeDocument.kDirectionForward);
   				document.getElementById("doorStatus").innerHTML = "&nbsp&nbsp&nbsp&nbsp DOOR OPEN <br>";
   				
@@ -66,7 +67,7 @@
 	<!-- copy these lines to your document: -->
 
 	<div id="rpgi_hype_container" style="margin:auto;position:relative;width:414px;height:736px;overflow:hidden;">
-		<script type="text/javascript" charset="utf-8" src="RPGi.hyperesources/rpgi_hype_generated_script.js?87787"></script>
+		<script type="text/javascript" charset="utf-8" src="RPGi.hyperesources/rpgi_hype_generated_script.js?79554"></script>
 	</div>
 
 	<!-- end copy -->
