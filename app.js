@@ -46,15 +46,11 @@ if (fs.existsSync(streamingfileName)) {
     fs.unlink(streamingfileName);
 }
 
-// setInterval(function(){
-    // check the door on a fixed interval to catch non-triggered door events
-//     checkDoorStatus();
-// }, 60000);
-
 var sockets = {};
 
 // Start watching the door
 startWatching();
+startGarageVision();
 
 io.on('connection', function(socket) {
 
@@ -122,6 +118,7 @@ function startStreaming(io) {
     if (app.get('streamingFile')) {
         io.sockets.emit('liveStream', 'image_stream.jpg?_t=' + (Math.random() * 100000));
     } else {
+        console.log('starting...');
         var args = ["-w", "320", "-h", "240", "-q", "15", "-o", streamingfileName, "-t", "999999999", "-tl", "500", "-md", "5"];
         proc = spawn('raspistill', args);
 
@@ -137,23 +134,17 @@ function startWatching() {
 
     stopStreaming();
 
-    var args = ["-w", "320", "-h", "240", "-q", "15", "-o", aifileName, "-t", "999999999", "-tl", "30000", "-md", "5"];
+    var args = ["-w", "320", "-h", "240", "-q", "15", "-o", aifileName, "-t", "999999999", "-tl", "15000", "-md", "5"];
     proc = spawn('raspistill', args);
 
     app.set('watchingFile', true);
 
-    fs.watchFile(aifileName, function (event, filename) {
-        checkDoorStatus();
-    })
 }
 
 function stopWatching() {
     app.set('watchingFile', false);
     if (proc) proc.kill();
     fs.unwatchFile(aifileName);
-    if(fs.existsSync(aifileName)) {
-        fs.unlink(aifileName);
-    }
 }
 
 function stopStreaming() {
@@ -167,22 +158,18 @@ function stopStreaming() {
     }
 }
 
-  function checkDoorStatus() {
+function startGarageVision() {
 
-      var PythonShell = require('python-shell');
-      var options = {
-          mode: 'text',
-          scriptPath: './garagevision',
-          args: [aifileName]
-      };
-      PythonShell.run('vision.py', options, function (err, results) {
-          fs.readFile('vision.log', 'utf8', function (err, data) {
-              if (err) {
-                  return console.log(err);
-              }
-          });
-      });
-  }
+    var PythonShell = require('python-shell');
+    var options = {
+        mode: 'text',
+        scriptPath: './garagevision',
+        args: [aifileName]
+    };
+    PythonShell.run('vision.py', options, function (err, results) {
+        startGarageVision();
+    });
+}
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
