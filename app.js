@@ -10,6 +10,8 @@ var io            = socket_io();
 var spawn = require('child_process').spawn;
 var proc;
 var vision;
+const aifileName = './stream/image_ai.jpg';
+const streamingfileName = './stream/image_stream.jpg';
 
 var app = express();
 
@@ -36,12 +38,23 @@ app.get('/RPGi', function(req, res) {
   res.sendFile(__dirname + '/public/RPGi.html');
 });
 
-setInterval(function(){
-    // check the door once every 30 seconds.
-    checkDoorStatus();
-}, 30000);
+// clean up any leftover files
+if (fs.existsSync(aifileName)) {
+    fs.unlink(aifileName);
+}
+if (fs.existsSync(streamingfileName)) {
+    fs.unlink(streamingfileName);
+}
+
+// setInterval(function(){
+    // check the door on a fixed interval to catch non-triggered door events
+//     checkDoorStatus();
+// }, 60000);
 
 var sockets = {};
+
+// Start watching the door
+startWatching();
 
 io.on('connection', function(socket) {
 
@@ -59,13 +72,15 @@ io.on('connection', function(socket) {
 
         // no more sockets, kill the stream and the garagevision watch
         if (Object.keys(sockets).length == 0) {
-            app.set('watchingFile', false);
+            app.set('streamingFile', false);
             fs.unwatchFile('vision.log');
             stopStreaming();
+            startWatching();
         }
     });
 
     socket.on('start-stream', function () {
+        stopWatching();
         startStreaming(io);
     });
 
@@ -102,50 +117,71 @@ function sendDoorStatus() {
 
 function startStreaming(io) {
 
-    if (app.get('watchingFile')) {
+    stopWatching();
+
+    if (app.get('streamingFile')) {
         io.sockets.emit('liveStream', 'image_stream.jpg?_t=' + (Math.random() * 100000));
     } else {
-        var args = ["-w", "320", "-h", "240", "-q", "15", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "500", "-md", "5"];
+        var args = ["-w", "320", "-h", "240", "-q", "15", "-o", streamingfileName, "-t", "999999999", "-tl", "500", "-md", "5"];
         proc = spawn('raspistill', args);
 
-        app.set('watchingFile', true);
+        app.set('streamingFile', true);
 
-        fs.watchFile('./stream/image_stream.jpg', function (event, filename) {
+        fs.watchFile(streamingfileName, function (event, filename) {
             io.sockets.emit('liveStream', 'image_stream.jpg?_t=' + (Math.random() * 100000));
         })
     }
 }
 
+function startWatching() {
+
+    stopStreaming();
+
+    var args = ["-w", "320", "-h", "240", "-q", "15", "-o", aifileName, "-t", "999999999", "-tl", "30000", "-md", "5"];
+    proc = spawn('raspistill', args);
+
+    app.set('watchingFile', true);
+
+    fs.watchFile(aifileName, function (event, filename) {
+        checkDoorStatus();
+    })
+}
+
+function stopWatching() {
+    app.set('watchingFile', false);
+    if (proc) proc.kill();
+    fs.unwatchFile(aifileName);
+    if(fs.existsSync(aifileName)) {
+        fs.unlink(aifileName);
+    }
+}
+
 function stopStreaming() {
-    const fileName = './stream/image_stream.jpg';
     if (Object.keys(sockets).length == 0) {
-        app.set('watchingFile', false);
+        app.set('streamingFile', false);
         if (proc) proc.kill();
-        fs.unwatchFile(fileName);
-        fs.unlink(fileName);
+        fs.unwatchFile(streamingfileName);
+        if(fs.existsSync(streamingfileName)) {
+            fs.unlink(streamingfileName);
+        }
     }
 }
 
   function checkDoorStatus() {
 
-        if (fs.existsSync('./stream/image_stream.jpg')) {
-            var PythonShell = require('python-shell');
-            var options = {
-                mode: 'text',
-                scriptPath: './garagevision',
-                args: ['./stream/image_stream.jpg']
-            };
-            PythonShell.run('vision.py', options, function (err, results) {
-                fs.readFile('vision.log', 'utf8', function (err, data) {
-                    if (err) {
-                        return console.log(err);
-                    }
-                });
-            });
-        } else {
-            var args = ["-w", "320", "-h", "240", "-q", "15", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "500", "-md", "5"];
-            proc = spawn('raspistill', args);
-        }
+      var PythonShell = require('python-shell');
+      var options = {
+          mode: 'text',
+          scriptPath: './garagevision',
+          args: [aifileName]
+      };
+      PythonShell.run('vision.py', options, function (err, results) {
+          fs.readFile('vision.log', 'utf8', function (err, data) {
+              if (err) {
+                  return console.log(err);
+              }
+          });
+      });
   }
 
 // catch 404 and forward to error handler
