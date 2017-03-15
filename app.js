@@ -21,6 +21,7 @@ app.io = io;
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+app.set('garagevision', false);
 
 // setup streaming URL
 app.use('/', express.static(path.join(__dirname, 'stream')));
@@ -50,7 +51,11 @@ var sockets = {};
 
 // Start watching the door
 startWatching();
-startGarageVision();
+var garagevision = setInterval(function() {
+    if(!app.get('garagevision')) {
+        startGarageVision();
+    }
+}, 15000);
 
 io.on('connection', function(socket) {
 
@@ -160,6 +165,8 @@ function stopStreaming() {
 
 function startGarageVision() {
 
+    app.set('garagevision', true);
+
     var PythonShell = require('python-shell');
     var options = {
         mode: 'text',
@@ -167,7 +174,7 @@ function startGarageVision() {
         args: [aifileName]
     };
     PythonShell.run('vision.py', options, function (err, results) {
-        startGarageVision();
+        app.set('garagevision', false);
     });
 }
 
