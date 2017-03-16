@@ -41,13 +41,8 @@ while True:
         target = open('vision.log', 'w')
         target.truncate()
         target.write(label_lines[top_k[0]])
-    
-        #for node_id in top_k:
-        #    human_string = label_lines[node_id]
-        #    score = predictions[0][node_id]
-        #    print >>target, ('{%s:%.5f}' % (human_string, score))
         target.close()
-        time.sleep(5)
+        time.sleep(15)
 
 
 

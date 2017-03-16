@@ -51,11 +51,11 @@ var sockets = {};
 
 // Start watching the door
 startWatching();
-var garagevision = setInterval(function() {
+/*var garagevision = setInterval(function() {
     if(!app.get('garagevision')) {
         startGarageVision();
     }
-}, 15000);
+}, 15000);*/
 
 io.on('connection', function(socket) {
 
@@ -118,28 +118,28 @@ function sendDoorStatus() {
 
 function startStreaming(io) {
 
-    stopWatching();
+    // stopWatching();
 
-    if (app.get('streamingFile')) {
-        io.sockets.emit('liveStream', 'image_stream.jpg?_t=' + (Math.random() * 100000));
-    } else {
-        console.log('starting...');
-        var args = ["-w", "320", "-h", "240", "-q", "15", "-o", streamingfileName, "-t", "999999999", "-tl", "500", "-md", "5"];
-        proc = spawn('raspistill', args);
+    // if (app.get('streamingFile')) {
+        io.sockets.emit('liveStream', 'image_ai.jpg?_t=' + (Math.random() * 100000));
+    // } else {
 
-        app.set('streamingFile', true);
+        // var args = ["-w", "320", "-h", "240", "-q", "15", "-o", streamingfileName, "-t", "999999999", "-tl", "500", "-md", "5"];
+        // proc = spawn('raspistill', args);
 
-        fs.watchFile(streamingfileName, function (event, filename) {
-            io.sockets.emit('liveStream', 'image_stream.jpg?_t=' + (Math.random() * 100000));
+        // app.set('streamingFile', true);
+
+        fs.watchFile(aifileName, function (event, filename) {
+            io.sockets.emit('liveStream', 'image_ai.jpg?_t=' + (Math.random() * 100000));
         })
-    }
+    // }
 }
 
 function startWatching() {
 
-    stopStreaming();
+    // stopStreaming();
 
-    var args = ["-w", "320", "-h", "240", "-q", "15", "-o", aifileName, "-t", "999999999", "-tl", "15000", "-md", "5"];
+    var args = ["-w", "320", "-h", "240", "-q", "15", "-o", aifileName, "-t", "999999999", "-tl", "1500", "-md", "5"];
     proc = spawn('raspistill', args);
 
     app.set('watchingFile', true);
