@@ -1,14 +1,14 @@
 [Unit]
-Description=GarageMaster
+Description=RGPi
 
 [Service]
-ExecStart=/usr/local/bin/node /home/pi/scripts/garagemaster/bin/www
+ExecStart=/usr/local/bin/node /home/pi/scripts/rpgi/bin/www
 Restart=always
 User=root
 Group=root
 Environment=PATH=/usr/bin:/usr/local/bin
 Environment=NODE_ENV=production
-WorkingDirectory=/home/pi/scripts/garagemaster
+WorkingDirectory=/home/pi/scripts/rpgi
 
 [Install]
 WantedBy=multi-user.target
