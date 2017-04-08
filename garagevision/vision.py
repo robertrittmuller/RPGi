@@ -2,9 +2,14 @@ import tensorflow as tf
 import sys
 import os
 import time
+import picamera
 
 # play nice with CPU resources
 os.nice(20)
+
+# setup camera
+camera = picamera.PiCamera()
+camera.resolution = (320, 240)
 
 #can the excessive logging
 tf.logging.set_verbosity(tf.logging.FATAL)
@@ -24,7 +29,10 @@ with tf.gfile.FastGFile("garagevision/garagemaster_graph.pb", 'rb') as f:
 
 # Loop forever checking for changes
 while True:
-    
+
+    # take a photo
+    camera.capture(image_path)
+
     # Read in the image_data
     image_data = tf.gfile.FastGFile(image_path, 'rb').read()
     
