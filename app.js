@@ -7,11 +7,17 @@ var bodyParser    = require('body-parser');
 var fs            = require('fs');
 var socket_io     = require( "socket.io" );
 var io            = socket_io();
+var rangeCheck    = require('range_check');
 var spawn = require('child_process').spawn;
 var proc;
 var vision;
 const aifileName = './stream/image_ai.jpg';
 const streamingfileName = './stream/image_stream.jpg';
+
+// if you don't see your internal IP range below please add it!
+const allowed_ip_ranges = ['192.168.0.0/24',
+                            '192.168.1.0/24',
+                            '172.16.0.0/16']
 
 var app = express();
 
@@ -34,9 +40,22 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// display the local UI
+// display the local UI only if the user is coming from a local IP or has the cookie set
+
 app.get('/RPGi', function(req, res) {
-  res.sendFile(__dirname + '/public/RPGi.html');
+
+    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    if (ip.substr(0, 7) == "::ffff:") {
+        ip = ip.substr(7)
+    }
+    if(rangeCheck.inRange(ip, allowed_ip_ranges)) {
+        res.sendFile(__dirname + '/public/RPGi.html');
+        var minute = 525600 * 1000;
+        res.cookie('remember', 1, { maxAge: minute });
+    } else {
+        // still display the page for now...dumb Apple blocks cookies for home screen apps
+        res.sendFile(__dirname + '/public/RPGi.html');
+    }
 });
 
 // clean up any leftover files
