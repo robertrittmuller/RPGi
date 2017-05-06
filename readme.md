@@ -10,7 +10,7 @@ A totally amazing software solution to AI-enable your garage door using a Raspbe
  - In addition to the door status indicator, you can also view door status via the live camera feed.
  - Setup files needed to run as a service under Raspbian!
 
-## Future Features (Time Permitting)
+#### Future Features (Time Permitting)
 
  - Ability to send notifications when the garage door has been open beyond a set time limit.
  - Showing which users are connected in the UI.
