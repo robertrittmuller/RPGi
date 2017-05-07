@@ -70,9 +70,9 @@ $ sudo systemctl start garagevision
 
 ## Screenshots!
 
-!['Door Closed'](https://github.com/robertrittmuller/RPGi/tree/master/screenshots/screen1.jpg) 
-!['Door Open'](https://github.com/robertrittmuller/RPGi/tree/master/screenshots/screen2.jpg)
-!['Door Camera'](https://github.com/robertrittmuller/RPGi/tree/master/screenshots/screen3.jpg)
+!['Door Closed'](https://github.com/robertrittmuller/RPGi/blob/master/screenshots/screen1.PNG) 
+!['Door Open'](https://github.com/robertrittmuller/RPGi/blob/master/screenshots/screen2.PNG)
+!['Door Camera'](https://github.com/robertrittmuller/RPGi/blob/master/screenshots/screen3.PNG)
 
 ## Have a question?
 
