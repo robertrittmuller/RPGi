@@ -68,6 +68,9 @@ $ sudo systemctl start rpgi
 $ sudo systemctl start garagevision
 ```
 
+## Screenshots!
+
+!['Door Closed'](screenshots/screen1.jpg)
 
 ## Have a question?
 
