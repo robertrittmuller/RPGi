@@ -72,7 +72,7 @@ $ sudo systemctl start garagevision
 
 <img align="left" src="https://github.com/robertrittmuller/RPGi/blob/master/screenshots/screen1.PNG" width=300>
 <img align="left" src="https://github.com/robertrittmuller/RPGi/blob/master/screenshots/screen2.PNG" width=300> 
-<img align="left" src="https://github.com/robertrittmuller/RPGi/blob/master/screenshots/screen3.PNG" width=300> 
+<img src="https://github.com/robertrittmuller/RPGi/blob/master/screenshots/screen3.PNG" width=300> 
 
 ## Have a question?
 
