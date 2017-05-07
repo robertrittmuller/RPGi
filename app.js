@@ -42,7 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // display the local UI only if the user is coming from a local IP or has the cookie set
 
-app.get('/RPGi', function(req, res) {
+app.get('/', function(req, res) {
 
     var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     if (ip.substr(0, 7) == "::ffff:") {
