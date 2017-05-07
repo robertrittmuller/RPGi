@@ -70,9 +70,9 @@ $ sudo systemctl start garagevision
 
 ## Screenshots!
 
-!['Door Closed'](/screenshots/screen1.jpg) 
-!['Door Open'](/screenshots/screen2.jpg)
-!['Door Camera'](/screenshots/screen3.jpg)
+!['Door Closed'](/robertrittmuller/RPGi/tree/master/screenshots/screen1.jpg) 
+!['Door Open'](/robertrittmuller/RPGi/tree/master/screenshots/screen2.jpg)
+!['Door Camera'](/robertrittmuller/RPGi/tree/master/screenshots/screen3.jpg)
 
 ## Have a question?
 
