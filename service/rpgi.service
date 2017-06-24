@@ -2,7 +2,7 @@
 Description=RGPi
 
 [Service]
-ExecStart=/usr/local/bin/node /home/pi/scripts/rpgi/bin/www
+ExecStart=/usr/bin/node /home/pi/scripts/rpgi/bin/www
 Restart=always
 User=root
 Group=root

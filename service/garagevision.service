@@ -2,13 +2,13 @@
 Description=GarageVision
 
 [Service]
-ExecStart=/usr/bin/python /home/pi/scripts/garagemaster/garagevision/vision.py /home/pi/scripts/garagemaster/stream/image_ai.jpg
+ExecStart=/usr/bin/python /home/pi/scripts/rpgi/garagevision/vision.py /home/pi/scripts/rpgi/stream/image_ai.jpg
 Restart=always
 User=root
 Group=root
 Environment=PATH=/usr/bin:/usr/local/bin
 Environment=NODE_ENV=production
-WorkingDirectory=/home/pi/scripts/garagemaster
+WorkingDirectory=/home/pi/scripts/rpgi
 
 [Install]
 WantedBy=multi-user.target
