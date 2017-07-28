@@ -29,28 +29,32 @@ with tf.gfile.FastGFile("garagevision/garagemaster_graph.pb", 'rb') as f:
 
 # Loop forever checking for changes
 while True:
+    count = 0
+    # loop 10 times and then unload the model and reload to prevent memory leak
+    while (count < 11):
 
-    # take a photo
-    camera.capture(image_path)
+        # take a photo
+        camera.capture(image_path)
 
-    # Read in the image_data
-    image_data = tf.gfile.FastGFile(image_path, 'rb').read()
+        # Read in the image_data
+        image_data = tf.gfile.FastGFile(image_path, 'rb').read()
     
-    with tf.Session() as sess:
-        # Feed the image_data as input to the graph and get first prediction
-        softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
+        with tf.Session() as sess:
+            # Feed the image_data as input to the graph and get first prediction
+            softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
     
-        predictions = sess.run(softmax_tensor, \
+            predictions = sess.run(softmax_tensor, \
                                {'DecodeJpeg/contents:0': image_data})
     
-        # Sort to show labels of first prediction in order of confidence
-        top_k = predictions[0].argsort()[-len(predictions[0]):][::-1]
+            # Sort to show labels of first prediction in order of confidence
+            top_k = predictions[0].argsort()[-len(predictions[0]):][::-1]
     
-        target = open('vision.log', 'w')
-        target.truncate()
-        target.write(label_lines[top_k[0]])
-        target.close()
-        time.sleep(15)
+            target = open('vision.log', 'w')
+            target.truncate()
+            target.write(label_lines[top_k[0]])
+            target.close()
+            time.sleep(15)
+            count = count + 1
 
 
 
