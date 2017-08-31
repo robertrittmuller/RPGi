@@ -30,6 +30,7 @@ The hardware for this project is based on the Raspberry Pi B+ project board comb
  - [2-Channel Relay Module](https://www.amazon.com/gp/product/B0057OC6D8/ref=oh_aui_detailpage_o07_s00?ie=UTF8&psc=1) - Needed to trigger the garage door remote.
  - [32GB Class 10 Micro SDHC Card](https://www.amazon.com/gp/product/B00IVPU786/ref=oh_aui_detailpage_o03_s00?ie=UTF8&psc=1) - Don't make the same mistake as I did...max SD card size on Raspberry Pi B is 32GB!
  - [2x 40pcs Female to Female 2.54mm 0.1 in Jumper Wires](https://www.amazon.com/gp/product/B00GSE2S98/ref=oh_aui_detailpage_o07_s00?ie=UTF8&psc=1) - Needed to connect the relay to the Pi.
+ - And you will need to sacrifice one wireless garage door opener!
  
 ### Software
 Server side, RPGi is built with Node.js and Tensorflow with the model being served via a python script.
