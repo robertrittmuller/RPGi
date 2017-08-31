@@ -20,6 +20,18 @@ A totally amazing software solution to AI-enable your garage door using a Raspbe
 
 ## Technology
 
+### Hardware
+The hardware for this project is based on the Raspberry Pi B+ project board combined with the Raspberry Pi 
+8 megapixel camera. Everything for the build was purchased off Amazon and is linked here for easy reference. 
+
+ - [Raspberry Pi B Starter Kit (includes case)](https://www.amazon.com/gp/product/B01DMFQZXK/ref=oh_aui_search_detailpage?ie=UTF8&psc=1)
+ - [Raspberry Pi Camera Module V2](https://www.amazon.com/gp/product/B01ER2SKFS/ref=oh_aui_search_detailpage?ie=UTF8&psc=1)
+ - [Latest Raspberry Pi Camera Case](https://www.amazon.com/gp/product/B00IJZJKK4/ref=oh_aui_search_detailpage?ie=UTF8&psc=1)
+ - [2-Channel Relay Module](https://www.amazon.com/gp/product/B0057OC6D8/ref=oh_aui_detailpage_o07_s00?ie=UTF8&psc=1) - Needed to trigger the garage door remote.
+ - [32GB Class 10 Micro SDHC Card](https://www.amazon.com/gp/product/B00IVPU786/ref=oh_aui_detailpage_o03_s00?ie=UTF8&psc=1) - Don't make the same mistake as I did...max SD card size on Raspberry Pi B is 32GB!
+ - [2x 40pcs Female to Female 2.54mm 0.1 in Jumper Wires](https://www.amazon.com/gp/product/B00GSE2S98/ref=oh_aui_detailpage_o07_s00?ie=UTF8&psc=1) - Needed to connect the relay to the Pi.
+ 
+### Software
 Server side, RPGi is built with Node.js and Tensorflow with the model being served via a python script.
 
 The front-end is built with Hype and is designed to be used on iOS and Android mobile phones.
