@@ -7,10 +7,6 @@ import picamera
 # play nice with CPU resources
 os.nice(20)
 
-# setup camera
-camera = picamera.PiCamera()
-camera.resolution = (320, 240)
-
 #can the excessive logging
 tf.logging.set_verbosity(tf.logging.FATAL)
 
@@ -32,6 +28,10 @@ while True:
     count = 0
     # loop 10 times and then unload the model and reload to prevent memory leak
     while (count < 11):
+
+        # setup camera
+        camera = picamera.PiCamera()
+        camera.resolution = (320, 240)
 
         # take a photo
         camera.capture(image_path)
