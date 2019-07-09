@@ -11,6 +11,7 @@ var rangeCheck    = require('range_check');
 var spawn = require('child_process').spawn;
 var proc;
 var vision;
+const loginHash = 'dcb8affee16bdae08be65769bf1edc5facbd6ec0';
 const aifileName = './stream/image_ai.jpg';
 const streamingfileName = './stream/image_stream.jpg';
 
@@ -97,6 +98,14 @@ io.on('connection', function(socket) {
     socket.on('start-stream', function () {
         stopWatching();
         startStreaming(io);
+    });
+
+    socket.on('loginReq', function (passCodeHash) {
+        if(passCodeHash == loginHash) {
+            io.sockets.emit('login', 'true')
+        } else {
+            io.sockets.emit('login', 'false')
+        }
     });
 
     // setup file watch for out from GarageVision
