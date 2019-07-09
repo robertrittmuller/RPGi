@@ -11,7 +11,9 @@ var rangeCheck    = require('range_check');
 var spawn = require('child_process').spawn;
 var proc;
 var vision;
-const loginHash = 'dcb8affee16bdae08be65769bf1edc5facbd6ec0';
+// need to modify this with your own password has using the following process (under linux):
+// echo -n "12345" | openssl sha1
+const loginHash = '8cb2237d0679ca88db6464eac60da96345513964';
 const aifileName = './stream/image_ai.jpg';
 const streamingfileName = './stream/image_stream.jpg';
 

@@ -7,6 +7,7 @@ A totally amazing software solution to AI-enable your garage door using a Raspbe
  - Fully trained Tensorflow neural network to recognize if the garage door is open or closed using just the Raspberry Pi Camera!
  - "Iron Man" inspired UI that's designed to look awesome on your mobile phone.
  - Uses sockets.io for real-time UI updates.
+ - Basic level of security using a PIN that is set via a server-side configuration.
  - In addition to the door status indicator, you can also view door status via the live camera feed.
  - Setup files needed to run as a service under Raspbian!
 
